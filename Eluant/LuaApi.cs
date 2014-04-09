@@ -58,7 +58,7 @@ namespace Eluant
             SetStepMul = 7,
         }
 
-        internal const string LUA_DLL = "lua5.1";
+        internal const string LUA_DLL = "lua51.dll";
         internal const CallingConvention LUA_CALLING_CONVENTION = CallingConvention.Cdecl;
 
         public const int LUA_REGISTRYINDEX = -10000;
