@@ -204,7 +204,7 @@ namespace Eluant
 
             LuaApi.lua_pop(LuaState, 1);
 
-            DoString(Scripts.BindingSupport).Dispose();
+            DoBuffer(Scripts.BindingSupport, "BindingSupport.lua").Dispose();
 
             createManagedCallWrapper = (LuaFunction)Globals["eluant_create_managed_call_wrapper"];
 
@@ -492,9 +492,9 @@ namespace Eluant
             }
         }
 
-        private void LoadString(string str)
+        private void LoadBuffer(string str, string name)
         {
-            if (LuaApi.luaL_loadstring(LuaState, str) != 0) {
+            if (LuaApi.luaL_loadbuffer(LuaState, str, str.Length, name) != 0) {
                 var error = LuaApi.lua_tostring(LuaState, -1);
                 LuaApi.lua_pop(LuaState, 1);
 
@@ -508,7 +508,20 @@ namespace Eluant
 
             CheckDisposed();
 
-            LoadString(str);
+            LoadBuffer(str, str);
+
+            // Compiled code is on the stack, now call it.
+            return Call(new LuaValue[0]);
+        }
+
+        public LuaVararg DoBuffer(string str, string name)
+        {
+            if (str == null) { throw new ArgumentNullException("str"); }
+            if (name == null) { throw new ArgumentNullException("name"); }
+
+            CheckDisposed();
+
+            LoadBuffer(str, name);
 
             // Compiled code is on the stack, now call it.
             return Call(new LuaValue[0]);
@@ -520,7 +533,7 @@ namespace Eluant
 
             CheckDisposed();
 
-            LoadString(str);
+            LoadBuffer(str, str);
 
             var fn = Wrap(-1);
 
