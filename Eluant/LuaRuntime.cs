@@ -584,7 +584,15 @@ namespace Eluant
 
                 needEnterClr = true;
                 OnEnterLua();
-                if (LuaApi.lua_pcall(LuaState, args.Count, LuaApi.LUA_MULTRET, 0) != 0) {
+
+                // Include a lua stacktrace if an error is encountered
+                LuaApi.lua_getglobal(LuaState, "debug");
+                LuaApi.lua_getfield(LuaState, -1, "traceback");
+                LuaApi.lua_remove(LuaState, -2);
+                int errindex = -args.Count - 2;
+                LuaApi.lua_insert(LuaState, errindex);
+
+                if (LuaApi.lua_pcall(LuaState, args.Count, LuaApi.LUA_MULTRET, errindex) != 0) {
                     needEnterClr = false;
                     OnEnterClr();
 
