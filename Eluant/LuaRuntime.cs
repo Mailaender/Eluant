@@ -212,6 +212,7 @@ namespace Eluant
 
             metamethodCallbacks["__newindex"] = CreateCallbackWrapper(NewindexCallback);
             metamethodCallbacks["__index"] = CreateCallbackWrapper(IndexCallback);
+            metamethodCallbacks["__tostring"] = CreateCallbackWrapper(ToStringCallback);
 
             metamethodCallbacks["__add"] = CreateCallbackWrapper(state => BinaryOperatorCallback<ILuaAdditionBinding>(state, (i, a, b) => i.Add(this, a, b)));
             metamethodCallbacks["__sub"] = CreateCallbackWrapper(state => BinaryOperatorCallback<ILuaSubtractionBinding>(state, (i, a, b) => i.Subtract(this, a, b)));
@@ -827,6 +828,24 @@ namespace Eluant
                 toDispose.Add(key);
 
                 var value = obj[this, key];
+                toDispose.Add(value);
+
+                Push(value);
+
+                return 1;
+            });
+        }
+
+        private int ToStringCallback(IntPtr state)
+        {
+            return LuaToClrBoundary(state, toDispose => {
+                var obj = GetClrObject<LuaClrObjectValue>(1).BackingCustomObject as ILuaToStringBinding;
+
+                if (obj == null) {
+                    throw new LuaException("CLR object does not support indexing.");
+                }
+
+                var value = obj.ToString(this);
                 toDispose.Add(value);
 
                 Push(value);
