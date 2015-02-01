@@ -493,6 +493,16 @@ namespace Eluant
             }
         }
 
+        private void LoadString(string str)
+        {
+            if (LuaApi.luaL_loadstring(LuaState, str) != 0) {
+                var error = LuaApi.lua_tostring(LuaState, -1);
+                LuaApi.lua_pop(LuaState, 1);
+
+                throw new LuaException(error);
+            }
+        }
+
         private void LoadBuffer(string str, string name)
         {
             if (LuaApi.luaL_loadbuffer(LuaState, str, name) != 0) {
