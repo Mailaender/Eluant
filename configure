@@ -22,6 +22,6 @@ if [ "$os" == 'Linux' ]; then
 		echo "Eluant.dll.config has been created successfully."
 	fi
 elif [ "$os" == 'Darwin' ]; then
-	cp Eluant.dll.config.in Eluant.dll.config
+	cp Eluant.dll.config.in Eluant.Tests/bin/Debug/Eluant.dll.config
 	echo "Eluant.dll.config has been created successfully."
 fi
