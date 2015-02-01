@@ -495,7 +495,7 @@ namespace Eluant
 
         private void LoadBuffer(string str, string name)
         {
-            if (LuaApi.luaL_loadbuffer(LuaState, str, str.Length, name) != 0) {
+            if (LuaApi.luaL_loadbuffer(LuaState, str, name) != 0) {
                 var error = LuaApi.lua_tostring(LuaState, -1);
                 LuaApi.lua_pop(LuaState, 1);
 

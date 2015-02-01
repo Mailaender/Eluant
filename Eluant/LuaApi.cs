@@ -296,9 +296,9 @@ namespace Eluant
         [DllImport(LUA_DLL, CallingConvention=LUA_CALLING_CONVENTION)]
         public static extern int luaL_loadbuffer(IntPtr L, [MarshalAs(UnmanagedType.LPStr)] string s, UIntPtr size, string n);
 
-        public static int luaL_loadbuffer(IntPtr L, string s, int size, string n)
+        public static int luaL_loadbuffer(IntPtr L, string s, string n)
         {
-            return luaL_loadbuffer(L, s, new UIntPtr(unchecked((ulong)size)), n);
+            return luaL_loadbuffer(L, s, new UIntPtr(unchecked((ulong)s.Length)), n);
         }
 
         [DllImport(LUA_DLL, CallingConvention=LUA_CALLING_CONVENTION)]
