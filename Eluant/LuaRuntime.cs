@@ -860,7 +860,7 @@ namespace Eluant
                 var obj = GetClrObject<LuaClrObjectValue>(1).BackingCustomObject as ILuaToStringBinding;
 
                 if (obj == null) {
-                    throw new LuaException("CLR object does not support indexing.");
+                    throw new LuaException("CLR object does not support conversion to string.");
                 }
 
                 var value = obj.ToString(this);
